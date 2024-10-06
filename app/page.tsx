@@ -70,7 +70,7 @@ export default function Home() {
   
   const calculateBustProbability = (playerTotal : number):number => {
     const remainingCards = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11]; // Simplified for demonstration
-    let bustingCards = remainingCards.filter(
+    const bustingCards = remainingCards.filter(
       (cardValue) => playerTotal + cardValue > 21
     ).length;
     return bustingCards / remainingCards.length;
@@ -91,7 +91,7 @@ export default function Home() {
   
     // Check for soft total (hand contains an Ace counted as 11)
     const hasAce = playerCards.some((card: string) => card.toUpperCase() === 'A');
-    const softTotal = hasAce && playerTotal <= 21;
+    // const softTotal = hasAce && playerTotal <= 21;
   
     // Calculate probabilities
     const playerBustProb = calculateBustProbability(playerTotal);
@@ -219,13 +219,13 @@ export default function Home() {
         </h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Dealer's Card:</label>
+            <label className="block text-gray-700 mb-2">Dealer&apos;s Card:</label>
             <select
               className="w-full p-2 border border-gray-300 rounded text-[blue]"
               value={dealerCard}
               onChange={(e) => setDealerCard(e.target.value)}
             >
-              <option value="">Select Dealer's Card</option>
+              <option value="">Select Dealer&apos;s Card</option>
               {cardOptions.map((card) => (
                 <option key={card} value={card}>
                   {card}
