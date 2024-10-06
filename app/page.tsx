@@ -8,7 +8,9 @@ export default function Home() {
   const [advice, setAdvice] = useState('');
   const [cashoutAvailable, setCashoutAvailable] = useState(false);
 
-  const cardValues : any = {
+  type CardKey = 'A' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | 'J' | 'Q' | 'K';
+
+  const cardValues :  Record<CardKey, number> = {
     'A': 11,
     '2': 2,
     '3': 3,
@@ -24,15 +26,15 @@ export default function Home() {
     'K': 10,
   };
   
-  const convertCard = (card : any) => {
-    return cardValues[card.toUpperCase()] || 0;
+  const convertCard = (card : string) => {
+    return cardValues[card.toUpperCase() as CardKey] || 0;
   };
   
-  const calculateHandTotal = (cards : any) => {
+  const calculateHandTotal = (cards: string[]): number => {
     let total = 0;
     let aceCount = 0;
   
-    cards.forEach((card : any) => {
+    cards.forEach((card : string) => {
       const value = convertCard(card);
       total += value;
       if (card.toUpperCase() === 'A') {
@@ -49,7 +51,7 @@ export default function Home() {
     return total;
   };
   
-  const dealerBustProbabilities  : any= {
+  const dealerBustProbabilities  : Record<number, number>= {
     2: 0.35,
     3: 0.37,
     4: 0.40,
@@ -62,11 +64,11 @@ export default function Home() {
     11: 0.11, // Ace
   };
   
-  const getDealerBustProbability = (dealerCardValue : any) => {
+  const getDealerBustProbability = (dealerCardValue : number) => {
     return dealerBustProbabilities[dealerCardValue] || 0;
   };
   
-  const calculateBustProbability = (playerTotal : any) => {
+  const calculateBustProbability = (playerTotal : number):number => {
     const remainingCards = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11]; // Simplified for demonstration
     let bustingCards = remainingCards.filter(
       (cardValue) => playerTotal + cardValue > 21
@@ -75,7 +77,7 @@ export default function Home() {
   };
   
 
-  const getAdvice = (dealerCard : any, playerCards : any, cashoutAvailable : any) => {
+  const getAdvice = (dealerCard : string, playerCards : string[], cashoutAvailable : boolean) => {
     // Convert card inputs to numerical values
     const dealerValue = convertCard(dealerCard);
     const playerValues = playerCards.map(convertCard);
@@ -88,7 +90,7 @@ export default function Home() {
       playerValues.length === 2 && playerValues[0] === playerValues[1];
   
     // Check for soft total (hand contains an Ace counted as 11)
-    const hasAce = playerCards.some((card: any) => card.toUpperCase() === 'A');
+    const hasAce = playerCards.some((card: string) => card.toUpperCase() === 'A');
     const softTotal = hasAce && playerTotal <= 21;
   
     // Calculate probabilities
@@ -200,7 +202,7 @@ export default function Home() {
   
   
 
-  const handleSubmit = (e : any) => {
+  const handleSubmit = (e : React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const recommendation = getAdvice(dealerCard, playerCards, cashoutAvailable);
     setAdvice(`Recommended Action: ${recommendation}`);
